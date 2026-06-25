@@ -1,0 +1,96 @@
+aid: dbt-cloud
+url: https://raw.githubusercontent.com/api-evangelist/dbt-cloud/refs/heads/main/apis.yml
+name: dbt Cloud
+kind: company
+description: dbt Cloud is the analytics-engineering platform from dbt Labs for transforming
+  data in the warehouse. It exposes the Administrative API for managing accounts, projects,
+  jobs, runs, and environments, the Discovery (Metadata) API for project metadata and
+  lineage via GraphQL, and the Semantic Layer API for querying governed metrics over
+  GraphQL and JDBC.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Data
+- Analytics Engineering
+- Data Transformation
+- ELT
+- Semantic Layer
+created: '2026-06-21'
+modified: '2026-06-21'
+specificationVersion: '0.19'
+apis:
+- aid: dbt-cloud:dbt-cloud-administrative-api
+  name: dbt Cloud Administrative API
+  tags:
+  - Jobs
+  - Runs
+  - Projects
+  - Environments
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  baseURL: https://cloud.getdbt.com/api/v2
+  properties:
+  - url: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+    type: Documentation
+  - url: https://docs.getdbt.com/dbt-cloud/api-v2
+    type: APIReference
+  - url: openapi/dbt-cloud-openapi.yml
+    type: OpenAPI
+  description: REST API (v2 and v3) over Bearer-token / service-token auth for programmatic
+    administration of dbt Cloud - listing and triggering jobs, polling and cancelling
+    runs, downloading run artifacts, and managing accounts, projects, environments,
+    connections, credentials, groups, and users.
+- aid: dbt-cloud:dbt-cloud-discovery-api
+  name: dbt Cloud Discovery (Metadata) API
+  tags:
+  - Metadata
+  - Lineage
+  - GraphQL
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.getdbt.com/docs/dbt-cloud-apis/discovery-api
+  baseURL: https://metadata.cloud.getdbt.com/graphql
+  properties:
+  - url: https://docs.getdbt.com/docs/dbt-cloud-apis/discovery-api
+    type: Documentation
+  - url: https://docs.getdbt.com/docs/dbt-apis/discovery-querying
+    type: APIReference
+  description: GraphQL API for fetching metadata about the state and health of a dbt
+    project - models, sources, tests, exposures, lineage/DAG, and execution results -
+    queried with a Metadata Only service token against metadata.cloud.getdbt.com/graphql.
+- aid: dbt-cloud:dbt-cloud-semantic-layer-api
+  name: dbt Cloud Semantic Layer API
+  tags:
+  - Semantic Layer
+  - Metrics
+  - GraphQL
+  - JDBC
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.getdbt.com/docs/dbt-cloud-apis/sl-api-overview
+  baseURL: https://docs.getdbt.com/docs/dbt-cloud-apis/sl-graphql
+  properties:
+  - url: https://docs.getdbt.com/docs/dbt-cloud-apis/sl-api-overview
+    type: Documentation
+  - url: https://docs.getdbt.com/docs/dbt-cloud-apis/sl-graphql
+    type: GraphQL
+  - url: https://docs.getdbt.com/docs/dbt-apis/sl-jdbc
+    type: APIReference
+  description: APIs for querying governed metrics and dimensions defined in the dbt
+    Semantic Layer - a GraphQL API and a JDBC driver (ArrowFlight SQL) - with standard
+    metadata functionality, authorized via service token.
+common:
+- type: GitHubOrganization
+  url: https://github.com/dbt-labs
+- type: LinkedIn
+  url: https://www.linkedin.com/company/dbtlabsinc
+- type: Website
+  url: https://www.getdbt.com
+- type: Documentation
+  url: https://docs.getdbt.com/docs/dbt-cloud-apis/overview
+- type: Plans
+  url: plans/dbt-cloud-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/dbt-cloud-rate-limits.yml
+- type: FinOps
+  url: finops/dbt-cloud-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

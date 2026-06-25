@@ -1,0 +1,97 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: dbt Cloud
+providerId: dbt-cloud
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: true
+tags:
+- Data
+- Analytics Engineering
+- Data Transformation
+- ELT
+- Semantic Layer
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of dbt Cloud spend. dbt Cloud bills seat-based subscriptions
+  (per developer seat per month) with usage allowances metered by successful
+  models built per month and, for the Semantic Layer, queried metrics per month.
+  Developer is free for one seat; Starter is a flat per-seat fee; Enterprise and
+  Enterprise+ are negotiated. Cost optimization centers on controlling seat
+  counts, model-build volume, and metric query volume against plan allowances.
+notes: >-
+  Per-plan prices and allowances are subject to change; verify against the dbt
+  pricing page during reconciliation.
+sources:
+- https://www.getdbt.com/pricing
+- https://docs.getdbt.com/docs/dbt-cloud-apis/overview
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: dbt Labs
+serviceCategory: Analytics
+billingModel:
+  pricingCategory: Subscription
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: dbt Cloud
+  ServiceCategory: Analytics
+  ProviderName: dbt Labs
+  PublisherName: dbt Labs
+  InvoiceIssuerName: dbt Labs
+  BillingCurrency: USD
+  ChargeCategory: Purchase
+  PricingCategory: Subscription
+meters:
+- name: developer_seats
+  description: Active developer seats on the subscription, billed per seat per month.
+  unit: seats
+  aggregation: max
+  dimensions:
+  - account
+  - plan
+- name: models_built
+  description: Successful models built per month, metered against the plan allowance.
+  unit: models
+  aggregation: sum
+  dimensions:
+  - account
+  - project
+- name: queried_metrics
+  description: Semantic Layer metrics queried per month, metered against the plan allowance.
+  unit: metrics
+  aggregation: sum
+  dimensions:
+  - account
+  - project
+- name: projects
+  description: Number of projects in the account, capped by plan tier.
+  unit: projects
+  aggregation: max
+  dimensions:
+  - account
+  - plan
+principles:
+- name: Visibility
+  description: Track seat utilization, monthly successful model builds, and queried metrics against plan allowances in the dbt Cloud console.
+- name: Allocation
+  description: Map projects and seats to teams and cost centers; tag jobs and environments by workload.
+- name: Optimization
+  description: Right-size seat counts, consolidate and schedule jobs to reduce redundant model builds, and prune unused metrics to stay within allowances.
+- name: Accountability
+  description: Assign project owners; review seat, model-build, and metric-query trends monthly against budget and plan tier.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,221 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "dbt Cloud Administrative API",
+    "version": "2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/"
+          },
+          "docs": "List the accounts the authenticated token can access."
+        },
+        {
+          "info": {
+            "name": "Retrieve Account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/"
+          },
+          "docs": "Retrieve a single account by ID."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/projects/"
+          },
+          "docs": "List projects in an account."
+        },
+        {
+          "info": {
+            "name": "Create Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/projects/",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"name\": \"<string>\"\n}"
+            }
+          },
+          "docs": "Create a project in an account."
+        },
+        {
+          "info": {
+            "name": "Retrieve Project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/projects/{{id}}/"
+          },
+          "docs": "Retrieve a project by ID."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/jobs/"
+          },
+          "docs": "List jobs in an account, optionally filtered by project."
+        },
+        {
+          "info": {
+            "name": "Create Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/jobs/",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"project_id\": 0,\n  \"environment_id\": 0,\n  \"name\": \"<string>\",\n  \"execute_steps\": [\"dbt run\"]\n}"
+            }
+          },
+          "docs": "Create a job in an account."
+        },
+        {
+          "info": {
+            "name": "Retrieve Job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/jobs/{{id}}/"
+          },
+          "docs": "Retrieve a job by ID."
+        },
+        {
+          "info": {
+            "name": "Trigger Job Run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/jobs/{{job_id}}/run/",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"cause\": \"Triggered via API\"\n}"
+            }
+          },
+          "docs": "Trigger a job to run."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Runs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Runs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/runs/"
+          },
+          "docs": "List runs in an account, with optional filtering and ordering."
+        },
+        {
+          "info": {
+            "name": "Retrieve Run",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/runs/{{id}}/"
+          },
+          "docs": "Retrieve a run by ID."
+        },
+        {
+          "info": {
+            "name": "Cancel Run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/runs/{{run_id}}/cancel/"
+          },
+          "docs": "Cancel a run that is queued or in progress."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Run Artifacts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Run Artifacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/runs/{{run_id}}/artifacts/"
+          },
+          "docs": "List artifact files generated by a completed run."
+        },
+        {
+          "info": {
+            "name": "Retrieve Run Artifact",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud.getdbt.com/api/v2/accounts/{{account_id}}/runs/{{run_id}}/artifacts/manifest.json"
+          },
+          "docs": "Download a specific artifact file (e.g. manifest.json, catalog.json, run_results.json) from a run."
+        }
+      ]
+    }
+  ]
+}

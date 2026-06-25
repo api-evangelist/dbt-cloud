@@ -1,0 +1,95 @@
+aid: dbt-cloud
+name: dbt Cloud
+review:
+  question: Does dbt Cloud expose a documented public WebSocket API?
+  answer: false
+  date: '2026-06-21'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was created. dbt Cloud exposes no documented WebSocket
+    or Server-Sent Events (SSE) streaming surface. Its non-REST surfaces are
+    GraphQL (Discovery/Metadata and Semantic Layer) and a JDBC driver
+    (ArrowFlight SQL) for the Semantic Layer - none of which are event-driven
+    streaming protocols in AsyncAPI scope.
+findings:
+  summary: |
+    dbt Cloud does not publish a documented public WebSocket API. The
+    Administrative API is REST (HTTPS) under https://cloud.getdbt.com/api/v2
+    and /api/v3 using Bearer service-token / personal-access-token auth, where
+    run progress is obtained by polling run status rather than via streaming.
+    The Discovery (Metadata) API is GraphQL over HTTPS at
+    https://metadata.cloud.getdbt.com/graphql. The Semantic Layer offers a
+    GraphQL API and a JDBC driver (ArrowFlight SQL). No realtime, bidirectional,
+    or audio/event streaming WebSocket (ws:// or wss://) endpoint is documented.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://cloud.getdbt.com/api/v2
+      documented: true
+    - protocol: REST
+      scheme: https
+      baseURL: https://cloud.getdbt.com/api/v3
+      documented: true
+    - protocol: GraphQL
+      scheme: https
+      baseURL: https://metadata.cloud.getdbt.com/graphql
+      note: Discovery (Metadata) API. GraphQL over HTTPS; not WebSocket subscriptions.
+      documented: true
+    - protocol: GraphQL
+      scheme: https
+      note: Semantic Layer GraphQL API; host is account/region-specific. Not WebSocket.
+      documented: true
+    - protocol: JDBC
+      scheme: arrow-flight-sql
+      note: Semantic Layer JDBC driver (ArrowFlight SQL, driver v12.0.0+). Not WebSocket.
+      documented: true
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented across the Administrative, Discovery, or Semantic Layer APIs as of the review date.
+  endpointsConfirmedRest:
+    - GET  https://cloud.getdbt.com/api/v2/accounts/
+    - GET  https://cloud.getdbt.com/api/v2/accounts/{account_id}/
+    - GET  https://cloud.getdbt.com/api/v2/accounts/{account_id}/projects/
+    - POST https://cloud.getdbt.com/api/v2/accounts/{account_id}/projects/
+    - GET  https://cloud.getdbt.com/api/v2/accounts/{account_id}/jobs/
+    - POST https://cloud.getdbt.com/api/v2/accounts/{account_id}/jobs/
+    - POST https://cloud.getdbt.com/api/v2/accounts/{account_id}/jobs/{job_id}/run/
+    - GET  https://cloud.getdbt.com/api/v2/accounts/{account_id}/runs/
+    - GET  https://cloud.getdbt.com/api/v2/accounts/{account_id}/runs/{id}/
+    - POST https://cloud.getdbt.com/api/v2/accounts/{account_id}/runs/{run_id}/cancel/
+    - GET  https://cloud.getdbt.com/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/
+    - GET  https://cloud.getdbt.com/api/v2/accounts/{account_id}/runs/{run_id}/artifacts/{path}
+    - GET  https://cloud.getdbt.com/api/v3/accounts/{account_id}/projects/
+    - GET  https://cloud.getdbt.com/api/v3/accounts/{account_id}/projects/{project_id}/environments/
+    - POST https://cloud.getdbt.com/api/v3/accounts/{account_id}/connections/
+  graphqlSurfaces:
+    - name: Discovery (Metadata) API
+      url: https://metadata.cloud.getdbt.com/graphql
+      note: Region-prefixed hosts also exist (e.g. https://{prefix}.metadata.us1.dbt.com/graphql). Auth via Metadata Only service token.
+    - name: Semantic Layer GraphQL API
+      url: https://docs.getdbt.com/docs/dbt-cloud-apis/sl-graphql
+      note: Query governed metrics and dimensions; host is account/region-specific and obtained from Semantic Layer config. Auth via service token.
+sources:
+  - url: https://docs.getdbt.com/docs/dbt-cloud-apis/overview
+    type: Documentation
+    note: Lists three APIs (Administrative, Discovery, Semantic Layer); no WebSocket mentioned.
+  - url: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+    type: Documentation
+    note: Administrative API base URLs cloud.getdbt.com/api/v2 and /api/v3, Bearer/service-token auth, REST only.
+  - url: https://docs.getdbt.com/docs/dbt-cloud-apis/discovery-api
+    type: Documentation
+    note: Discovery API is GraphQL at metadata.cloud.getdbt.com/graphql.
+  - url: https://docs.getdbt.com/docs/dbt-cloud-apis/sl-api-overview
+    type: Documentation
+    note: Semantic Layer offers GraphQL and JDBC (ArrowFlight SQL); no WebSocket.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket or SSE protocol surface exists, so no AsyncAPI document was
+    authored. The apis.yml models the Administrative API (REST/OpenAPI) plus
+    the Discovery (Metadata) and Semantic Layer GraphQL/JDBC surfaces, each with
+    Documentation and GraphQL/APIReference properties pointing at the official
+    dbt docs.

@@ -1,0 +1,289 @@
+{
+  "info": {
+    "name": "dbt Cloud Administrative API",
+    "description": "Administrative API (v2) for dbt Cloud - manage accounts, projects, jobs, runs, and run artifacts. Authenticated with a Bearer service token or personal access token.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://cloud.getdbt.com/api/v2"
+    },
+    {
+      "key": "account_id",
+      "value": "00000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "List Accounts",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", ""]
+            },
+            "description": "List the accounts the authenticated token can access."
+          }
+        },
+        {
+          "name": "Retrieve Account",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", ""]
+            },
+            "description": "Retrieve a single account by ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "List Projects",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/projects/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "projects", ""]
+            },
+            "description": "List projects in an account."
+          }
+        },
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/projects/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "projects", ""]
+            },
+            "description": "Create a project in an account."
+          }
+        },
+        {
+          "name": "Retrieve Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/projects/:id/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "projects", ":id", ""],
+              "variable": [{ "key": "id", "value": "0" }]
+            },
+            "description": "Retrieve a project by ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Jobs",
+      "item": [
+        {
+          "name": "List Jobs",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/jobs/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "jobs", ""]
+            },
+            "description": "List jobs in an account, optionally filtered by project."
+          }
+        },
+        {
+          "name": "Create Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project_id\": 0,\n  \"environment_id\": 0,\n  \"name\": \"<string>\",\n  \"execute_steps\": [\"dbt run\"]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/jobs/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "jobs", ""]
+            },
+            "description": "Create a job in an account."
+          }
+        },
+        {
+          "name": "Retrieve Job",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/jobs/:id/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "jobs", ":id", ""],
+              "variable": [{ "key": "id", "value": "0" }]
+            },
+            "description": "Retrieve a job by ID."
+          }
+        },
+        {
+          "name": "Trigger Job Run",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cause\": \"Triggered via API\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/jobs/:job_id/run/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "jobs", ":job_id", "run", ""],
+              "variable": [{ "key": "job_id", "value": "0" }]
+            },
+            "description": "Trigger a job to run."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Runs",
+      "item": [
+        {
+          "name": "List Runs",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/runs/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "runs", ""]
+            },
+            "description": "List runs in an account, with optional filtering and ordering."
+          }
+        },
+        {
+          "name": "Retrieve Run",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/runs/:id/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "runs", ":id", ""],
+              "variable": [{ "key": "id", "value": "0" }]
+            },
+            "description": "Retrieve a run by ID."
+          }
+        },
+        {
+          "name": "Cancel Run",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/runs/:run_id/cancel/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "runs", ":run_id", "cancel", ""],
+              "variable": [{ "key": "run_id", "value": "0" }]
+            },
+            "description": "Cancel a run that is queued or in progress."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Run Artifacts",
+      "item": [
+        {
+          "name": "List Run Artifacts",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/runs/:run_id/artifacts/",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "runs", ":run_id", "artifacts", ""],
+              "variable": [{ "key": "run_id", "value": "0" }]
+            },
+            "description": "List artifact files generated by a completed run."
+          }
+        },
+        {
+          "name": "Retrieve Run Artifact",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account_id}}/runs/:run_id/artifacts/manifest.json",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "{{account_id}}", "runs", ":run_id", "artifacts", "manifest.json"],
+              "variable": [{ "key": "run_id", "value": "0" }]
+            },
+            "description": "Download a specific artifact file (e.g. manifest.json, catalog.json, run_results.json) from a run."
+          }
+        }
+      ]
+    }
+  ]
+}

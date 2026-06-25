@@ -1,0 +1,233 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: dbt Cloud
+providerId: dbt-cloud
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: true
+tags:
+- Data
+- Analytics Engineering
+- Data Transformation
+- ELT
+- Semantic Layer
+- Plans
+description: >-
+  dbt Cloud is sold in seat-based subscription tiers metered primarily by
+  successful models built per month, with the Semantic Layer additionally
+  metered by queried metrics per month. The Developer tier is free for a single
+  seat; Starter is a flat per-developer-seat monthly fee; Enterprise and
+  Enterprise+ are custom-priced. API access (Administrative, Discovery, and
+  Semantic Layer APIs) is available on Starter, Enterprise, and Enterprise+.
+notes: >-
+  Prices and limits as published on the dbt pricing page; plan names and limits
+  change over time. Verify current figures on the pricing page during
+  reconciliation.
+sources:
+- https://www.getdbt.com/pricing
+- https://docs.getdbt.com/docs/dbt-cloud-apis/overview
+plans:
+- id: dbt-cloud-developer
+  name: Developer
+  type: free
+  description: >-
+    Free single-seat tier with the browser IDE, job scheduling, and the latest
+    dbt release. Includes a 14-day trial of Starter features.
+  entries:
+  - label: Developer Seats
+    name: developer_seats
+    type: flat
+    metric: seats
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0
+    userMultiplied: false
+  - label: Successful Models Built
+    name: models_built
+    type: usage
+    metric: models
+    limit: 3000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Projects
+    name: projects
+    type: flat
+    metric: projects
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  elements:
+  - name: Browser-based IDE
+  - name: Job Scheduling
+  - name: Multi-Factor Authentication
+- id: dbt-cloud-starter
+  name: Starter
+  type: subscription
+  description: >-
+    Per-developer-seat subscription adding API access, basic dbt Catalog and
+    Semantic Layer, and Copilot code generation.
+  entries:
+  - label: Developer Seats
+    name: developer_seats
+    type: flat
+    metric: seats
+    limit: 5
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $100 per developer seat / month
+    userMultiplied: true
+  - label: Successful Models Built
+    name: models_built
+    type: usage
+    metric: models
+    limit: 15000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Queried Metrics
+    name: queried_metrics
+    type: usage
+    metric: metrics
+    limit: 5000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Projects
+    name: projects
+    type: flat
+    metric: projects
+    limit: 1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  elements:
+  - name: API Access
+  - name: dbt Catalog (basic)
+  - name: Semantic Layer (basic)
+  - name: Copilot Code Generation
+- id: dbt-cloud-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Custom-priced tier adding advanced Catalog and Semantic Layer, Canvas,
+    Insights, and Mesh capabilities, with higher build and metric allowances and
+    multi-project support.
+  entries:
+  - label: Developer Seats
+    name: developer_seats
+    type: flat
+    metric: seats
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  - label: Successful Models Built
+    name: models_built
+    type: usage
+    metric: models
+    limit: 100000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Queried Metrics
+    name: queried_metrics
+    type: usage
+    metric: metrics
+    limit: 20000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Projects
+    name: projects
+    type: flat
+    metric: projects
+    limit: 30
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  elements:
+  - name: Advanced dbt Catalog
+  - name: Advanced Semantic Layer
+  - name: Canvas
+  - name: Insights
+  - name: dbt Mesh
+- id: dbt-cloud-enterprise-plus
+  name: Enterprise+
+  type: enterprise
+  description: >-
+    Highest tier adding PrivateLink, IP restrictions, rollback, hybrid projects,
+    and unlimited projects on top of Enterprise capabilities.
+  entries:
+  - label: Developer Seats
+    name: developer_seats
+    type: flat
+    metric: seats
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  - label: Successful Models Built
+    name: models_built
+    type: usage
+    metric: models
+    limit: 100000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Queried Metrics
+    name: queried_metrics
+    type: usage
+    metric: metrics
+    limit: 20000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Projects
+    name: projects
+    type: flat
+    metric: projects
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  elements:
+  - name: PrivateLink
+  - name: IP Restrictions
+  - name: Rollback
+  - name: Hybrid Projects
+  - name: Unlimited Projects
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

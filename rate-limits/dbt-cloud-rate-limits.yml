@@ -1,0 +1,74 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: dbt Cloud
+providerId: dbt-cloud
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Data
+- Analytics Engineering
+- Data Transformation
+- ELT
+- Semantic Layer
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  The dbt Cloud Administrative API enforces per-account request rate limits and
+  returns HTTP 429 when they are exceeded; clients should poll run status on a
+  reasonable interval (for example every 10 or more seconds) rather than tightly.
+  The Discovery (Metadata) and Semantic Layer APIs apply their own query limits.
+  Plan-level usage allowances (successful models built per month and queried
+  metrics per month) act as the primary consumption ceilings. Specific numeric
+  per-endpoint request rates are not reconciled in this artifact.
+notes: >-
+  Verify current request-rate values, polling guidance, and per-API limits in
+  the dbt Cloud API documentation during reconciliation; figures vary by plan
+  and deployment region.
+sources:
+- https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+- https://docs.getdbt.com/docs/dbt-cloud-apis/overview
+- https://www.getdbt.com/pricing
+responseCodes:
+  throttled: 429
+limits:
+- name: Administrative API Requests
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Per-account request rate on cloud.getdbt.com/api/v2 and /api/v3; returns 429 when exceeded.
+- name: Run Status Polling
+  scope: account
+  metric: requests
+  limit: poll on a reasonable interval
+  notes: Poll run status (e.g. every 10s or more) rather than continuously to avoid throttling.
+- name: Pagination Page Size
+  scope: request
+  metric: results
+  limit: 100
+  notes: List endpoints cap the limit query parameter at 100 results per page; use offset to paginate.
+- name: Successful Models Built
+  scope: account
+  metric: models
+  limit: plan-dependent (3,000 Developer / 15,000 Starter / 100,000 Enterprise per month)
+  notes: Monthly successful-model build allowance per plan acts as a consumption ceiling.
+- name: Queried Metrics (Semantic Layer)
+  scope: account
+  metric: metrics
+  limit: plan-dependent (5,000 Starter / 20,000 Enterprise per month)
+  notes: Monthly Semantic Layer queried-metrics allowance per plan.
+- name: Discovery API Queries
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: GraphQL queries to metadata.cloud.getdbt.com/graphql are subject to their own query limits.
+policies:
+- name: Tiered Allowances
+  description: Monthly model-build and queried-metric allowances scale up across Developer, Starter, Enterprise, and Enterprise+ plans.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter on HTTP 429 and poll run status at a sensible interval.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
