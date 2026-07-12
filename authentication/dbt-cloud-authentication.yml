@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/dbt-cloud-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: BearerAuthentication
+  type: http
+  scheme: bearer
+  description: 'dbt Cloud service token or personal access token passed in the Authorization
+    header as ''Authorization: Token <token>'' or ''Authorization: Bearer <token>''.'
+  sources:
+  - openapi/dbt-cloud-openapi.yml

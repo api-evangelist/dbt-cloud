@@ -77,6 +77,12 @@ apis:
     Semantic Layer - a GraphQL API and a JDBC driver (ArrowFlight SQL) - with standard
     metadata functionality, authorized via service token.
 common:
+- type: TrustCenter
+  url: security/dbt-cloud-trust-center.yml
+- type: DomainSecurity
+  url: security/dbt-cloud-domain-security.yml
+- type: Authentication
+  url: authentication/dbt-cloud-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/dbt-labs
 - type: LinkedIn
