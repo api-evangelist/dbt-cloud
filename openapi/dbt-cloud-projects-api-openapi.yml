@@ -1,0 +1,198 @@
+openapi: 3.0.1
+info:
+  title: dbt Cloud Administrative Accounts Projects API
+  description: The dbt Cloud Administrative API enables programmatic administration of a dbt Cloud account. Use it to list and trigger jobs, poll and cancel runs, download run artifacts, and manage accounts, projects, and environments. This document models the documented v2 REST surface served from https://cloud.getdbt.com/api/v2. Requests are authenticated with a Bearer service token or personal access token. dbt Labs also offers a v3 REST API for additional resource management, a GraphQL Discovery (Metadata) API at metadata.cloud.getdbt.com/graphql, and a Semantic Layer API (GraphQL and JDBC).
+  termsOfService: https://www.getdbt.com/cloud/terms
+  contact:
+    name: dbt Labs Support
+    url: https://docs.getdbt.com/docs/dbt-cloud-apis/overview
+  version: '2'
+servers:
+- url: https://cloud.getdbt.com/api/v2
+  description: dbt Cloud Administrative API v2 (multi-tenant North America). Account-specific regions use cloud.getdbt.com, emea.dbt.com, au.dbt.com, or a single-tenant host.
+security:
+- BearerAuthentication: []
+tags:
+- name: Projects
+  description: dbt projects within an account.
+paths:
+  /accounts/{account_id}/projects/:
+    get:
+      operationId: listProjects
+      tags:
+      - Projects
+      summary: List projects in an account.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectListResponse'
+    post:
+      operationId: createProject
+      tags:
+      - Projects
+      summary: Create a project in an account.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectResponse'
+  /accounts/{account_id}/projects/{id}/:
+    get:
+      operationId: retrieveProject
+      tags:
+      - Projects
+      summary: Retrieve a project by ID.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/PathId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectResponse'
+    post:
+      operationId: updateProject
+      tags:
+      - Projects
+      summary: Update a project by ID.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/PathId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectResponse'
+    delete:
+      operationId: destroyProject
+      tags:
+      - Projects
+      summary: Delete a project by ID.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/PathId'
+      responses:
+        '200':
+          description: OK
+components:
+  parameters:
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Numeric dbt Cloud account ID.
+    PathId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Numeric resource ID.
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        maximum: 100
+      description: Maximum number of results to return (max 100).
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: integer
+      description: Number of results to skip for pagination.
+  schemas:
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        account_id:
+          type: integer
+        name:
+          type: string
+        connection_id:
+          type: integer
+        repository_id:
+          type: integer
+        state:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ProjectResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusMeta'
+        data:
+          $ref: '#/components/schemas/Project'
+    Pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+        total_count:
+          type: integer
+    ProjectListResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusMeta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+        extra:
+          type: object
+          properties:
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+    StatusMeta:
+      type: object
+      properties:
+        code:
+          type: integer
+        is_success:
+          type: boolean
+        user_message:
+          type: string
+        developer_message:
+          type: string
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+      description: 'dbt Cloud service token or personal access token passed in the Authorization header as ''Authorization: Token <token>'' or ''Authorization: Bearer <token>''.'

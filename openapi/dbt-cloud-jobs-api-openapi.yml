@@ -1,0 +1,328 @@
+openapi: 3.0.1
+info:
+  title: dbt Cloud Administrative Accounts Jobs API
+  description: The dbt Cloud Administrative API enables programmatic administration of a dbt Cloud account. Use it to list and trigger jobs, poll and cancel runs, download run artifacts, and manage accounts, projects, and environments. This document models the documented v2 REST surface served from https://cloud.getdbt.com/api/v2. Requests are authenticated with a Bearer service token or personal access token. dbt Labs also offers a v3 REST API for additional resource management, a GraphQL Discovery (Metadata) API at metadata.cloud.getdbt.com/graphql, and a Semantic Layer API (GraphQL and JDBC).
+  termsOfService: https://www.getdbt.com/cloud/terms
+  contact:
+    name: dbt Labs Support
+    url: https://docs.getdbt.com/docs/dbt-cloud-apis/overview
+  version: '2'
+servers:
+- url: https://cloud.getdbt.com/api/v2
+  description: dbt Cloud Administrative API v2 (multi-tenant North America). Account-specific regions use cloud.getdbt.com, emea.dbt.com, au.dbt.com, or a single-tenant host.
+security:
+- BearerAuthentication: []
+tags:
+- name: Jobs
+  description: Job definitions and triggering of job runs.
+paths:
+  /accounts/{account_id}/jobs/:
+    get:
+      operationId: listJobs
+      tags:
+      - Jobs
+      summary: List jobs in an account, optionally filtered by project.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - name: project_id
+        in: query
+        schema:
+          type: integer
+        description: Filter jobs by project ID.
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobListResponse'
+    post:
+      operationId: createJob
+      tags:
+      - Jobs
+      summary: Create a job in an account.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Job'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+  /accounts/{account_id}/jobs/{id}/:
+    get:
+      operationId: retrieveJob
+      tags:
+      - Jobs
+      summary: Retrieve a job by ID.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/PathId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+    post:
+      operationId: updateJob
+      tags:
+      - Jobs
+      summary: Update a job by ID.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/PathId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Job'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+    delete:
+      operationId: destroyJob
+      tags:
+      - Jobs
+      summary: Delete a job by ID.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - $ref: '#/components/parameters/PathId'
+      responses:
+        '200':
+          description: OK
+  /accounts/{account_id}/jobs/{job_id}/run/:
+    post:
+      operationId: triggerJobRun
+      tags:
+      - Jobs
+      summary: Trigger a job to run.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerRunRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunResponse'
+components:
+  schemas:
+    RunResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusMeta'
+        data:
+          $ref: '#/components/schemas/Run'
+    Job:
+      type: object
+      properties:
+        id:
+          type: integer
+        account_id:
+          type: integer
+        project_id:
+          type: integer
+        environment_id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        execute_steps:
+          type: array
+          items:
+            type: string
+        dbt_version:
+          type: string
+        state:
+          type: integer
+        triggers:
+          $ref: '#/components/schemas/JobTriggers'
+        settings:
+          $ref: '#/components/schemas/JobSettings'
+        schedule:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    JobListResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusMeta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+        extra:
+          type: object
+          properties:
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+    JobResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusMeta'
+        data:
+          $ref: '#/components/schemas/Job'
+    JobSettings:
+      type: object
+      properties:
+        threads:
+          type: integer
+        target_name:
+          type: string
+    Run:
+      type: object
+      properties:
+        id:
+          type: integer
+        account_id:
+          type: integer
+        project_id:
+          type: integer
+        job_definition_id:
+          type: integer
+        environment_id:
+          type: integer
+        status:
+          type: integer
+          description: 1=Queued, 2=Starting, 3=Running, 10=Success, 20=Error, 30=Cancelled.
+        status_humanized:
+          type: string
+        git_branch:
+          type: string
+        git_sha:
+          type: string
+        is_complete:
+          type: boolean
+        is_success:
+          type: boolean
+        is_error:
+          type: boolean
+        is_cancelled:
+          type: boolean
+        href:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        finished_at:
+          type: string
+          format: date-time
+    JobTriggers:
+      type: object
+      properties:
+        github_webhook:
+          type: boolean
+        git_provider_webhook:
+          type: boolean
+        schedule:
+          type: boolean
+        on_merge:
+          type: boolean
+    Pagination:
+      type: object
+      properties:
+        count:
+          type: integer
+        total_count:
+          type: integer
+    TriggerRunRequest:
+      type: object
+      required:
+      - cause
+      properties:
+        cause:
+          type: string
+          description: Human-readable reason the run was triggered.
+        git_sha:
+          type: string
+        git_branch:
+          type: string
+        schema_override:
+          type: string
+        dbt_version_override:
+          type: string
+        threads_override:
+          type: integer
+        steps_override:
+          type: array
+          items:
+            type: string
+    StatusMeta:
+      type: object
+      properties:
+        code:
+          type: integer
+        is_success:
+          type: boolean
+        user_message:
+          type: string
+        developer_message:
+          type: string
+  parameters:
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Numeric dbt Cloud account ID.
+    PathId:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Numeric resource ID.
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        maximum: 100
+      description: Maximum number of results to return (max 100).
+    Offset:
+      name: offset
+      in: query
+      schema:
+        type: integer
+      description: Number of results to skip for pagination.
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+      description: 'dbt Cloud service token or personal access token passed in the Authorization header as ''Authorization: Token <token>'' or ''Authorization: Bearer <token>''.'

@@ -1,0 +1,105 @@
+openapi: 3.0.1
+info:
+  title: dbt Cloud Administrative Accounts API
+  description: The dbt Cloud Administrative API enables programmatic administration of a dbt Cloud account. Use it to list and trigger jobs, poll and cancel runs, download run artifacts, and manage accounts, projects, and environments. This document models the documented v2 REST surface served from https://cloud.getdbt.com/api/v2. Requests are authenticated with a Bearer service token or personal access token. dbt Labs also offers a v3 REST API for additional resource management, a GraphQL Discovery (Metadata) API at metadata.cloud.getdbt.com/graphql, and a Semantic Layer API (GraphQL and JDBC).
+  termsOfService: https://www.getdbt.com/cloud/terms
+  contact:
+    name: dbt Labs Support
+    url: https://docs.getdbt.com/docs/dbt-cloud-apis/overview
+  version: '2'
+servers:
+- url: https://cloud.getdbt.com/api/v2
+  description: dbt Cloud Administrative API v2 (multi-tenant North America). Account-specific regions use cloud.getdbt.com, emea.dbt.com, au.dbt.com, or a single-tenant host.
+security:
+- BearerAuthentication: []
+tags:
+- name: Accounts
+  description: Account configuration and details.
+paths:
+  /accounts/:
+    get:
+      operationId: listAccounts
+      tags:
+      - Accounts
+      summary: List the accounts the authenticated token can access.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountListResponse'
+  /accounts/{account_id}/:
+    get:
+      operationId: retrieveAccount
+      tags:
+      - Accounts
+      summary: Retrieve a single account by ID.
+      parameters:
+      - $ref: '#/components/parameters/AccountId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+components:
+  schemas:
+    AccountResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusMeta'
+        data:
+          $ref: '#/components/schemas/Account'
+    AccountListResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/StatusMeta'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        plan:
+          type: string
+        state:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    StatusMeta:
+      type: object
+      properties:
+        code:
+          type: integer
+        is_success:
+          type: boolean
+        user_message:
+          type: string
+        developer_message:
+          type: string
+  parameters:
+    AccountId:
+      name: account_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Numeric dbt Cloud account ID.
+  securitySchemes:
+    BearerAuthentication:
+      type: http
+      scheme: bearer
+      description: 'dbt Cloud service token or personal access token passed in the Authorization header as ''Authorization: Token <token>'' or ''Authorization: Bearer <token>''.'
