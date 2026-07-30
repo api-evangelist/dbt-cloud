@@ -7,7 +7,20 @@ description: dbt Cloud is the analytics-engineering platform from dbt Labs for t
   jobs, runs, and environments, the Discovery (Metadata) API for project metadata and
   lineage via GraphQL, and the Semantic Layer API for querying governed metrics over
   GraphQL and JDBC.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: true
+  try_now: true
+  public: false
+  label: Freemium (free trial) · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/dbt-cloud.png
 tags:
 - Data
 - Analytics Engineering
@@ -18,27 +31,6 @@ created: '2026-06-21'
 modified: '2026-06-21'
 specificationVersion: '0.19'
 apis:
-- aid: dbt-cloud:dbt-cloud-administrative-api
-  name: dbt Cloud Administrative API
-  tags:
-  - Jobs
-  - Runs
-  - Projects
-  - Environments
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
-  baseURL: https://cloud.getdbt.com/api/v2
-  properties:
-  - url: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
-    type: Documentation
-  - url: https://docs.getdbt.com/dbt-cloud/api-v2
-    type: APIReference
-  - url: openapi/dbt-cloud-openapi.yml
-    type: OpenAPI
-  description: REST API (v2 and v3) over Bearer-token / service-token auth for programmatic
-    administration of dbt Cloud - listing and triggering jobs, polling and cancelling
-    runs, downloading run artifacts, and managing accounts, projects, environments,
-    connections, credentials, groups, and users.
 - aid: dbt-cloud:dbt-cloud-discovery-api
   name: dbt Cloud Discovery (Metadata) API
   tags:
@@ -53,9 +45,10 @@ apis:
     type: Documentation
   - url: https://docs.getdbt.com/docs/dbt-apis/discovery-querying
     type: APIReference
-  description: GraphQL API for fetching metadata about the state and health of a dbt
-    project - models, sources, tests, exposures, lineage/DAG, and execution results -
-    queried with a Metadata Only service token against metadata.cloud.getdbt.com/graphql.
+  description: >-
+    GraphQL API for fetching metadata about the state and health of a dbt project - models, sources, tests,
+    exposures, lineage/DAG, and execution results - queried with a Metadata Only service token against
+    metadata.cloud.getdbt.com/graphql.
 - aid: dbt-cloud:dbt-cloud-semantic-layer-api
   name: dbt Cloud Semantic Layer API
   tags:
@@ -73,9 +66,80 @@ apis:
     type: GraphQL
   - url: https://docs.getdbt.com/docs/dbt-apis/sl-jdbc
     type: APIReference
-  description: APIs for querying governed metrics and dimensions defined in the dbt
-    Semantic Layer - a GraphQL API and a JDBC driver (ArrowFlight SQL) - with standard
-    metadata functionality, authorized via service token.
+  description: >-
+    APIs for querying governed metrics and dimensions defined in the dbt Semantic Layer - a GraphQL API
+    and a JDBC driver (ArrowFlight SQL) - with standard metadata functionality, authorized via service
+    token.
+- aid: dbt-cloud:dbt-cloud-accounts-api
+  name: dbt Cloud Accounts API
+  description: Account configuration and details.
+  humanURL: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  baseURL: https://cloud.getdbt.com/api/v2
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/dbt-cloud-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  - type: APIReference
+    url: https://docs.getdbt.com/dbt-cloud/api-v2
+- aid: dbt-cloud:dbt-cloud-jobs-api
+  name: dbt Cloud Jobs API
+  description: Job definitions and triggering of job runs.
+  humanURL: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  baseURL: https://cloud.getdbt.com/api/v2
+  tags:
+  - Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/dbt-cloud-jobs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  - type: APIReference
+    url: https://docs.getdbt.com/dbt-cloud/api-v2
+- aid: dbt-cloud:dbt-cloud-projects-api
+  name: dbt Cloud Projects API
+  description: dbt projects within an account.
+  humanURL: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  baseURL: https://cloud.getdbt.com/api/v2
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/dbt-cloud-projects-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  - type: APIReference
+    url: https://docs.getdbt.com/dbt-cloud/api-v2
+- aid: dbt-cloud:dbt-cloud-run-artifacts-api
+  name: dbt Cloud Run Artifacts API
+  description: Artifacts (manifest, catalog, run results) produced by runs.
+  humanURL: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  baseURL: https://cloud.getdbt.com/api/v2
+  tags:
+  - Run Artifacts
+  properties:
+  - type: OpenAPI
+    url: openapi/dbt-cloud-run-artifacts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  - type: APIReference
+    url: https://docs.getdbt.com/dbt-cloud/api-v2
+- aid: dbt-cloud:dbt-cloud-runs-api
+  name: dbt Cloud Runs API
+  description: Job run history, status, and lifecycle.
+  humanURL: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  baseURL: https://cloud.getdbt.com/api/v2
+  tags:
+  - Runs
+  properties:
+  - type: OpenAPI
+    url: openapi/dbt-cloud-runs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getdbt.com/docs/dbt-cloud-apis/admin-cloud-api
+  - type: APIReference
+    url: https://docs.getdbt.com/dbt-cloud/api-v2
 common:
 - type: AgenticAccess
   url: agentic-access/dbt-cloud-agentic-access.yml
