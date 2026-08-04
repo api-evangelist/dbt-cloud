@@ -1,0 +1,22 @@
+{
+  "provider": "dbt-cloud",
+  "sources": [
+    "dbt-cloud-accounts-api-openapi.yml",
+    "dbt-cloud-jobs-api-openapi.yml",
+    "dbt-cloud-projects-api-openapi.yml",
+    "dbt-cloud-run-artifacts-api-openapi.yml",
+    "dbt-cloud-runs-api-openapi.yml"
+  ],
+  "outputs": [
+    "dbt-cloud-accounts-api-openapi.yml",
+    "dbt-cloud-jobs-api-openapi.yml",
+    "dbt-cloud-projects-api-openapi.yml",
+    "dbt-cloud-run-artifacts-api-openapi.yml",
+    "dbt-cloud-runs-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
